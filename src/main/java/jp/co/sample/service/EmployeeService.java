@@ -1,4 +1,4 @@
-package jp.co.sample.repository;
+package jp.co.sample.service;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.sample.domain.Employee;
+import jp.co.sample.repository.EmployeeRepository;
 
 @Service
 @Transactional
@@ -33,5 +34,13 @@ public class EmployeeService {
 		return employeeRepository.load(id);
 	}
 	
+	
+	/**
+	 * 従業員情報を更新する.
+	 * @param employee
+	 */
+	public void update(Employee employee) {
+		employeeRepository.update(employee);
+	}
 	
 }
