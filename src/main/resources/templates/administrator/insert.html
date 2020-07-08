@@ -40,7 +40,7 @@
 										<label for="name">
 											氏名:
 										</label>
-										<label class="error-messages">
+										<label class="error-messages" th:errors="*{name}" style="color:red">
 											氏名を入力してください
 										</label>
 										<input type="text" name="name" id="name" class="form-control" placeholder="山田太郎" th:field="*{name}">
@@ -54,7 +54,7 @@
 										<label for="mailAddress">
 											メールアドレス:
 										</label>
-										<label  class="error-messages">
+										<label  class="error-messages" th:errors="*{mailAddress}" style="color:red">
 											メールアドレスを入力してください
 										</label>
 										<input type="text" name="mailAddress" id="mailAddress" class="form-control" placeholder="yamada@mail.com" th:field="*{mailAddress}">
@@ -68,7 +68,7 @@
 										<label for="passwaord">
 											パスワード:
 										</label>
-										<label class="error-messages">
+										<label class="error-messages" th:errors="*{password}" style="color:red">
 											パスワードを入力してください
 										</label>
 										<input type="password" name="password" id="password" class="form-control" placeholder="password" th:field="*{password}">

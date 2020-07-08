@@ -53,6 +53,11 @@ public class EmployeeController {
 		return "employee/detail";
 	}
 	
+	/**
+	 * 従業員情報情報を更新する.
+	 * @param form
+	 * @return
+	 */
 	@RequestMapping("/update")
 	public String update(UpdateEmployeeForm form) {
 		Employee employee = new Employee();
