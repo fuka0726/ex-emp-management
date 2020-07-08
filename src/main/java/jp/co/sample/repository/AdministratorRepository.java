@@ -63,6 +63,20 @@ public class AdministratorRepository {
 //		}
 		
 	}
+	/**
+	 * メールアドレスを受け取って管理者情報を返す.
+	 * @param mailAddress
+	 * @return 検索結果がなければnullを、あれば管理者情報を返す.
+	 */
+	public Administrator findByMailAddress(String mailAddress) {
+		String sql = "select id, name, mail_address, password from administrators where mail_address = :mailAddress  ";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress);
+		List<Administrator> administrator = template.query(sql,param, ADMIN_ROW_MAPPER);
+		if(administrator.size() == 0) {
+			return null;
+		}
+		return administrator.get(0);
+	}
 	
 	
 }
