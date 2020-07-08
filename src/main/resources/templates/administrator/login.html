@@ -15,11 +15,7 @@
 <body>
 	<div class="container">
 		<!-- 上余白 -->
-		<div class="row">
-			<div class="col-lg-offset-0 col-lg-6 col-md-8 col-sm-10 col-xs-12">
-				<img src="../../static/img/header_logo.png" th:src="@{/img/header_logo.png}">
-			</div>
-		</div>
+		<span th:include="administrator/logo::frag_logo"></span>
 		<!-- login form -->
 		<div class="row">
 			<div class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
