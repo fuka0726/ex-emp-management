@@ -12,6 +12,11 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.sample.domain.Administrator;
 
+/**
+ * administratorsテーブルを操作するリポジトリ.
+ * @author fuka
+ *
+ */
 @Repository
 public class AdministratorRepository {
 	

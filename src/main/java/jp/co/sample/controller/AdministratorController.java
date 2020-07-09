@@ -17,6 +17,11 @@ import jp.co.sample.form.InsertAdministratorForm;
 import jp.co.sample.form.LoginForm;
 import jp.co.sample.service.AdministratorService;
 
+/**
+ * 管理者情報を操作するコントローラー.
+ * @author fuka
+ *
+ */
 @Controller
 @RequestMapping("/")
 public class AdministratorController {

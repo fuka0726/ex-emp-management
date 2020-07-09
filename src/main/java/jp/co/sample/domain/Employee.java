@@ -2,6 +2,11 @@ package jp.co.sample.domain;
 
 import java.util.Date;
 
+/**
+ * 従業員情報を表すドメイン.
+ * @author fuka
+ *
+ */
 public class Employee {
 
 	//従業員ID

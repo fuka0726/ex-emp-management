@@ -9,9 +9,16 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import jp.co.sample.domain.Employee;
+import jp.co.sample.form.SearchForm;
 
+/**
+ * Employeeテーブルを操作するリポジトリ.
+ * @author fuka
+ *
+ */
 @Repository
 public class EmployeeRepository {
 
@@ -69,5 +76,80 @@ public class EmployeeRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
 		template.update(sql, param);
 	}
+	
+	
+	public StringBuilder createSql(SearchForm form,MapSqlParameterSource param,String mode) {
+		StringBuilder sql = new StringBuilder();
+		
+		//検索ヒット件数モード
+		if("count".equals(mode)) {
+			sql.append("select count(*) ");
+		}else {
+			sql.append("select id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count ");
+		}
+			sql.append("from employees where 1 = 1");
+			
+		//名前の曖昧検索 (検索フォームから名前を受け取ったら)
+		if(!StringUtils.isEmpty(form.getName())) {
+			sql.append("AND name ilike :name ");
+			param.addValue("name", "%" + form.getName() + "%");
+		}
+		
+		//検索ヒット件数モードでなかったら
+		if(!"count".equals(mode)) {
+			Integer startNumber = calcStartNumber(form);
+			if("0".equals(form.getSort())) {
+				sql.append(" ORDER BY id ");
+			} else if ("1".equals(form.getSort())) {
+				sql.append(" ORDER BY hire_date DESC, id ");
+			} else if ("2".equals(form.getSort())) {
+				sql.append(" ORDER BY hire_date ASC, id ");
+			} else if ("3".equals(form.getSort())) {
+				sql.append(" ORDER BY salary DESC, id ");
+			} else if ("4".equals(form.getSort())) {
+				sql.append(" ORDER BY salary ASC, id ");
+			} 
+			sql.append("LIMIT 10 OFFSET " + startNumber);
+		}
+		
+		return sql;
+		
+	}
+	
+	/**
+	 * 検索にヒットした件数を取得する.
+	 * @param form 名前検索フォーム
+	 * @return　検索ヒット数
+	 */
+	public Integer count(SearchForm form) {
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		StringBuilder sql = createSql(form, param, "count");
+		return template.queryForObject(sql.toString(), param, Integer.class);
+	}
+	
+	/**
+	 * 名前検索を行う.
+	 * @param form 名前検索フォーム
+	 * @return 検索結果
+	 */
+	public List<Employee> search(SearchForm form){
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		StringBuilder sql = createSql(form, param, null);
+		return template.query(sql.toString(), param, EMPLOYEE_ROW_MAPPER);
+	}
+	
+	/**
+	 * 現在のページでの開始番号-1を求める.
+	 * @param form　名前検索フォーム
+	 * @return 現在のページの開始番号-1 (OFFSET用の数字)
+	 */
+	private Integer calcStartNumber(SearchForm form) {
+		Integer pageNumber = form.getPage();
+		Integer startNumber =  10 * (pageNumber -1);
+		return startNumber;
+	}
+	
+	
+	
 	
 }
