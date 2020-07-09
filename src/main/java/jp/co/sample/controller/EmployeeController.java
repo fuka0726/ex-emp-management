@@ -87,7 +87,8 @@ public class EmployeeController {
 		}
 		if (employeeList.size() == 0) {
 			employeeList = employeeService.showList();
-			model.addAttribute("erroemessage", "該当する名前がありません");
+			model.addAttribute("errormessage", "該当する名前がありません");
+			model.addAttribute("employeeList", employeeList);
 		}
 		
 		
