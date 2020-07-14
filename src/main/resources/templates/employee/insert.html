@@ -93,6 +93,9 @@
 							      <label class="error-messages" th:errors="*{zipcode}">郵便番号を入力して下さい</label>
 							      <div class="input-group">
 							      <input type="text" name="zipcode" id="zipcode" placeholder="111-1111" size="7" class="form-control" th:field="*{zipcode}">
+							      <span class="input-group-btn">
+							      	<button id="search" type="button" class="btn btn-primary" >住所検索</button>
+							      </span>
 							      </div>
 							    </td>
 							  </tr>
@@ -156,9 +159,33 @@
 			</div>
 		</div>
 	</div>
-	<!-- end container -->
+	<!-- end container -->	
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script>
+	$(function(){
+		//検索ボタンを押したら
+		$('#search').click(function(){
+			
+			$.ajax({
+				url: "http://zipcoda.net/api",
+				dataType: "jsonp",
+				data:{
+					zipcode: $('#zipcode').val()
+				}
+			}).done(function(data){
+				//検索成功時にはページに結果を反映
+				//コンソールに取得データを表示
+				console.log(data);
+				$('#address').val(data.items[0].address);
+			}).fail(function(){
+				//検索失敗時には、エラーのダイアログを表示
+				alart('正しい結果を得られませんでした。');
+			});
+		});
+		
+	});
+	</script>
 	<script src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
 </body>
 </html>
