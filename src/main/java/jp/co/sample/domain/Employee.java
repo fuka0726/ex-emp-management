@@ -18,7 +18,7 @@ public class Employee {
 	//性別
 	private String gender;
 	//入社日
-	private java.util.Date hireDate;
+	private Date hireDate;
 	//メールアドレス
 	private String mailAddress;
 	//郵便番号
@@ -88,11 +88,11 @@ public class Employee {
 		this.gender = gender;
 	}
 
-	public java.util.Date getHireDate() {
+	public Date getHireDate() {
 		return hireDate;
 	}
 
-	public void setHireDate(java.util.Date hireDate) {
+	public void setHireDate(Date hireDate) {
 		this.hireDate = hireDate;
 	}
 
@@ -159,6 +159,7 @@ public class Employee {
 				+ ", telephone=" + telephone + ", salary=" + salary + ", characteristics=" + characteristics
 				+ ", dependentsCount=" + dependentsCount + "]";
 	}
+
 	
 	
 	

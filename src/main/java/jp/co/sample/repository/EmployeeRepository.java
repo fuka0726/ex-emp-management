@@ -3,6 +3,7 @@ package jp.co.sample.repository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -147,6 +148,55 @@ public class EmployeeRepository {
 		Integer pageNumber = form.getPage();
 		Integer startNumber =  10 * (pageNumber -1);
 		return startNumber;
+	}
+	
+	
+	
+	/**
+	 * メールアドレスから従業員情報を取得します.
+	 * @param mailAddress　メールアドレス
+	 * @return　従業員情報　存在しない場合はnullを返す.
+	 */
+	public Employee findByMailAddress(String mailAddress) {
+		String sql = "select id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count "
+				+ " from employees where mail_address = :mailAddress ";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress);
+		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+		if(employeeList.size() == 0) {
+			return null;
+		}
+		return employeeList.get(0);
+	}
+	
+	/**
+	 * 従業員情報を登録する.
+	 * 
+	 * @param employee 従業員情報
+	 */
+	synchronized public void insert(Employee employee) {
+		//IDの採番
+		employee.setId(getPrimaryID());
+		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count) "
+				+ " VALUES(:id,:name,:image,:gender,:hireDate,:mailAddress,:zipcode,:address,:telephone,:salary,:characteristics,:dependentsCount)";
+		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
+		template.update(sql, param);
+	}	
+	
+	/**
+	 * 従業員テーブルの中で一番大きいID + 1(プライマリーキー = 主キー)を取得する.
+	 * 
+	 * @return　テーブル内で一番値が大きいID + 1.データがない場合は1
+	 */
+	private Integer getPrimaryID() {
+		try {
+			String sql = "select MAX(id) FROM employees ";
+			SqlParameterSource param = new MapSqlParameterSource();
+			Integer maxID = template.queryForObject(sql, param, Integer.class);
+			return maxID + 1;
+		}catch (DataAccessException e) {
+			//データが存在しない場合
+			return 1;
+		}
 	}
 	
 	

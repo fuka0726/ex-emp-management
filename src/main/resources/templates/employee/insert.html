@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>従業員管理システム</title>
+<link rel="stylesheet" href="../../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" >
+<link rel="stylesheet" href="../../static/css/style.css" th:href="@{/css/style.css}" >
+</head>
+<body>
+<div class="container">
+		<span th:include="employee/header::frag_header"></span>
+
+		<!-- パンくずリスト -->
+		<ol class="breadcrumb">
+			<li><a href="list.html" th:href="@{/employee/showList}">従業員リスト</a></li>
+			<li class="active">従業員詳細</li>
+		</ol>
+		
+		<!-- register form -->
+		<div class="row">
+			<div
+				class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
+				<!-- 背景をグレーに、埋め込んだようなコンポーネント -->
+				<div class="well">
+				
+				
+<!-- ここから上を編集する必要はありません -->
+
+
+					<form method="post" action="list.html" th:action="@{/employee/insert}" th:object="${employeeInsertForm}" enctype="multipart/form-data">
+						<fieldset>
+							<legend>従業員情報</legend>
+							<table class="table table-striped">
+							  <tr>
+							    <th nowrap>
+							      従業員名
+							    </th>
+							    <td>
+							    <label class="error-messages" th:errors="*{name}">従業員名を入力してください</label>
+							     <input type="text" name="name" id="name" placeholder="山田花子" th:field="*{name}" class="form-control">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      写真
+							    </th>
+							    <td>
+							    <label class="error-messages" th:errors="*{imageFile}">
+							    写真を選択してください
+							    </label>
+							      <input name="imageFile" type="file" accept=".jpg,.png,image/jpeg,image/png" th:errorclass="error-input">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      性別
+							    </th>
+							    <td>
+							    <label class="error-messages" th:errors="*{gender}" >性別を選択してください
+							    </label>
+							    <div class="radio-inline" th:each="item:${genderMap}">
+							    <label>
+							    <input type="radio" name="gender"  th:value="${item.key}" th:text="${item.value}" th:field="*{gender}">
+							    </label>
+							    </div>
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      入社日
+							    </th>
+							    <td>
+							      <label class="error-messages" th:errors="*{hireDateString}">入社日を入力してください</label>
+							      <input type="date" name="hireDateString" id="hireDateString" placeholder="1991-7-26" class="form-control" th:field="*{hireDateString}" th:errorclass="error-input">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      メールアドレス
+							    </th>
+							    <td>
+									<label class="error-messages" th:errors="*{mailAddress}">メールアドレスを入力してください</label>
+									<input type="text" name="mailAddress" id="mailAddress" placeholder="yamada@mail.com" class="form-control" th:field="*{mailAddress}">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      郵便番号
+							    </th>
+							    <td>
+							      <label class="error-messages" th:errors="*{zipcode}">郵便番号を入力して下さい</label>
+							      <div class="input-group">
+							      <input type="text" name="zipcode" id="zipcode" placeholder="111-1111" size="7" class="form-control" th:field="*{zipcode}">
+							      </div>
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      住所
+							    </th>
+							    <td>
+									<label class="error-messages" th:errors="*{address}">住所を入力してください</label>
+									<input type="text" name="address" id="address" placeholder="東京都港区1-1-1" th:field="*{address}" class="form-control">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      電話番号
+							    </th>
+							    <td>
+									<label class="error-messages" th:errors="*{telephone}">電話番号を入力してください</label>
+									<input type="text" name="telephone" id="telephone" class="form-control" placeholder="000-0000-0000" th:field="*{telephone}">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      給料
+							    </th>
+							    <td>
+							      <label class="error-messages" th:errors="*{salaryString}">給料を入力してください</label>
+							      <input type="text" name="salaryString" id="salaryString" class="form-control" placeholder="200,000" th:field="*{salaryString}">
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      特性
+							    </th>
+							    <td>
+									<label class="error-messages" th:errors="*{characteristics}">特性を入力してください</label>
+									<textarea cols="40" rows="5" th:field="*{characteristics}" class="form-control"></textarea>
+							    </td>
+							  </tr>
+							  <tr>
+							    <th nowrap>
+							      扶養人数
+							    </th>
+							    <td>
+							    	<label class="error-messages" th:errors="*{dependentsCountString}">
+											扶養人数を入力してください
+									</label>
+									<select id="dependentsCountString" name="dependentsCountString" class="form-control">
+										<option th:each="item:${dependentsCountMap}" th:value="${item.value}" th:text="${item.key}" th:field="*{dependentsCountString}"></option>
+									</select>
+							    </td>
+							  </tr>
+							</table>
+							<button type="submit" class="btn btn-primary">更新</button>
+						</fieldset>
+					</form>
+					 
+					
+<!-- ここから下を編集する必要はありません -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end container -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+</body>
+</html>

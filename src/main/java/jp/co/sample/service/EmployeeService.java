@@ -69,6 +69,22 @@ public class EmployeeService {
 		return employee;
 	}
 	
+	/**
+	 * 従業員情報を登録します.
+	 * @param employee
+	 */
+	public void insert(Employee employee) {
+		employeeRepository.insert(employee);
+	}
+	
+	/**
+	 * メールアドレスから従業員情報を取得する.
+	 * @param mailAddress メールアドレス
+	 * @return 従業員情報　ない場合はnullを返す
+	 */
+	public Employee findByMailAddress(String mailAddress) {
+		return employeeRepository.findByMailAddress(mailAddress);
+	}
 	
 	
 }
