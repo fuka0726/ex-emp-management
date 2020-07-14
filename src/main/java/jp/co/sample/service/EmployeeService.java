@@ -87,4 +87,30 @@ public class EmployeeService {
 	}
 	
 	
+	/**
+	 * オートコンプリート用にJavaScriptの配列の中身を文字列で作る.
+	 * @param employeeList
+	 * @return
+	 */
+	public StringBuilder getEmployeeListForAutocomplete (List<Employee> employeeList) {
+		StringBuilder employeeListForAutocomplete = new StringBuilder();
+		 //従業員数だけ繰り返す
+		for (int i = 0; i < employeeList.size(); i++) {
+		//もし０じゃなければ「,」で区切る
+			if(i != 0) {
+				employeeListForAutocomplete.append(",");
+			}
+			//くりかえした数(従業員数)を取得
+			Employee employee = employeeList.get(i);
+			 // 「"」「従業員名」「"」
+			employeeListForAutocomplete.append("\""); 
+			employeeListForAutocomplete.append(employee.getName());
+			employeeListForAutocomplete.append("\"");
+		}
+		return employeeListForAutocomplete;
+	}
+	
+	
+	
+	
 }

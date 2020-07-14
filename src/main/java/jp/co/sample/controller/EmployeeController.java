@@ -107,7 +107,9 @@ public class EmployeeController {
 			model.addAttribute("employeeList", employeeList);
 		}
 		
-		
+		//オートコンプリート用にJavaScriptの配列の中身を文字列で作ってスコープへ格納
+		StringBuilder employeeListForAutocomplete = employeeService.getEmployeeListForAutocomplete(AllemployeeList);
+		model.addAttribute("employeeListForAutocomplete", employeeListForAutocomplete);
 		
 		return "employee/list";
 	}
@@ -221,13 +223,13 @@ public class EmployeeController {
 		if (originFileName == null) {
 			throw new FileNotFoundException();
 		}
-		//.がある後ろからのインデックス番号
+		//.がある後ろからのインデックス番号　(sample.pngなら、6)
 		int point = originFileName.lastIndexOf(".");
 		//見つからなかった場合(-1が返る)
 		if (point == -1) {
 			throw new FileNotFoundException();
 		}
-		//.の次の文字列 (sample.pngなら、png)
+		//.の次の文字列以降を取得 (sample.pngなら、png)
 		return originFileName.substring(point + 1);
 	}
 	
