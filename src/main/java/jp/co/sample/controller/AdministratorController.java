@@ -11,6 +11,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jp.co.sample.domain.Administrator;
 import jp.co.sample.form.InsertAdministratorForm;
@@ -37,10 +38,10 @@ public class AdministratorController {
 		return new InsertAdministratorForm();
 	}
 	
-	@ModelAttribute
-	public LoginForm setUpForm2() {
-		return new LoginForm();
-	}
+//	@ModelAttribute
+//	public LoginForm setUpForm2() {
+//		return new LoginForm();
+//	}
 	
 	
 	
@@ -88,7 +89,13 @@ public class AdministratorController {
 	 * @return　ログイン画面
 	 */
 	@RequestMapping("/")
-	public String toLogin() {
+	public String toLogin(Model model, @RequestParam(required = false) String error) {
+		System.err.println("login error" + error);
+		if(error != null) {
+			System.err.println("login failed");
+			model.addAttribute("error", "メールアドレスまたはパスワードが不正です");
+		}
+		
 		return "administrator/login";
 	}
 	
@@ -99,33 +106,33 @@ public class AdministratorController {
 	 * @param model　エラー格納用オブジェクト
 	 * @return　ログイン後の従業員一覧画面
 	 */
-	@RequestMapping("/login")
-	public String login(@Validated LoginForm form,BindingResult result,Model model) {
-		Administrator administrator = administratorService.login(form.getMailAddress(),form.getPassword());
-		
-		if(result.hasErrors()) {
-			return toLogin();
-		}
-		
-		if(administrator == null) {
+//	@RequestMapping("/login")
+//	public String login(@Validated LoginForm form,BindingResult result,Model model) {
+//		Administrator administrator = administratorService.login(form.getMailAddress(),form.getPassword());
+//		
+//		if(result.hasErrors()) {
+//			return toLogin();
+//		}
+//		
+//		if(administrator == null) {
 //			result.addError(new ObjectError("", "メールアドレスまたはパスワードが不正です"));
-		model.addAttribute("error", "メールアドレスまたはパスワードが不正です");
-			return toLogin();
-		}
-		session.setAttribute("administratorName", administrator.getName());
-		return "forward:/employee/showList";
-	}
+//		model.addAttribute("error", "メールアドレスまたはパスワードが不正です");
+//			return toLogin();
+//		}
+//		session.setAttribute("administratorName", administrator.getName());
+//		return "forward:/employee/showList";
+//	}
 	
 	/**
 	 * ログアウトする.
 	 * @return
 	 */
-	@RequestMapping("/logout")
-	public String logout() {
-		session.invalidate();
-		return "redirect:/";
+//	@RequestMapping("/logout")
+//	public String logout() {
+//		session.invalidate();
+//		return "redirect:/";
 //		return toLogin();
-	}
+//	}
 	
 	
 	

@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import jp.co.sample.domain.Employee;
+import jp.co.sample.domain.LoginAdministrator;
 import jp.co.sample.form.EmployeeInsertForm;
 import jp.co.sample.form.SearchForm;
 import jp.co.sample.form.UpdateEmployeeForm;
@@ -60,7 +62,7 @@ public class EmployeeController {
 	 * @return　従業員一覧
 	 */
 	@RequestMapping("/showList")
-	public String showList(SearchForm form,Model model,String searchName) {
+	public String showList(SearchForm form,Model model,String searchName, @AuthenticationPrincipal LoginAdministrator loginAdministrator) {
 		List<Employee> AllemployeeList = employeeService.showList();
 		
 		//ページング機能
@@ -110,6 +112,8 @@ public class EmployeeController {
 		//オートコンプリート用にJavaScriptの配列の中身を文字列で作ってスコープへ格納
 		StringBuilder employeeListForAutocomplete = employeeService.getEmployeeListForAutocomplete(AllemployeeList);
 		model.addAttribute("employeeListForAutocomplete", employeeListForAutocomplete);
+		
+		System.out.println(loginAdministrator.getAdministrator().getName() + "さんがログイン中");
 		
 		return "employee/list";
 	}

@@ -1,6 +1,7 @@
 package jp.co.sample.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,18 @@ public class AdministratorService {
 	@Autowired
 	private AdministratorRepository administratorRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	/**
 	 * 管理者情報を挿入する.
 	 * @param administrator
 	 */
 	public void insert(Administrator administrator) {
+		
+		//パスワードのハッシュ化
+		administrator.setPassword(passwordEncoder.encode(administrator.getPassword()));
+		
 		administratorRepository.insert(administrator);
 	}
 	
@@ -37,7 +44,12 @@ public class AdministratorService {
 	 * @return
 	 */
 	public Administrator login(String mailAddress, String password) {
-		return administratorRepository.findByMailAddressAndPassword(mailAddress, password);
+		Administrator administrator =  administratorRepository.findByMailAddressAndPassword(mailAddress, password);
+		//パスワード一致チェック
+		if(passwordEncoder.matches(password, administrator.getPassword())) {
+			return administrator;
+		}
+		return null;
 	}
 	
 	/**
